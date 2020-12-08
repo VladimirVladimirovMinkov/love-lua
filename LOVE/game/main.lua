@@ -6,6 +6,7 @@ local pad1_y = 0
 local pad2_y = 0
 local score1 = 0
 local score2 = 0
+
 function love.update()
 	pad1_y = pad1_y + (bool[isDown"s"] - bool[isDown"w"]) * 7
 	pad2_y = pad2_y + (bool[isDown"down"] - bool[isDown"up"]) * 7
@@ -28,6 +29,8 @@ function love.update()
 		ball.x = 0
 		ball.vx = -ball.vx
 		score2 = score2 + 1
+		pad1_y = 0
+		pad2_y = 0
 	end
 	if ball.x > 325 and ball.x < 350 and math.abs(pad2_y - ball.y) < 60 then
 		speed = speed + 0.5
@@ -39,12 +42,14 @@ function love.update()
 		ball.x = 0
 		ball.vx = -ball.vx
 		score1 = score1 + 1
+		pad1_y = 0
+		pad2_y = 0
 	end
 	if score1 > 6 or score2 > 6 then
 		print("player " .. (score1 > score2 and 1 or 2) .. " wins.")
-		love.event.quit()
 	end
 end
+
 function love.draw()
 	love.graphics.translate(400, 300)
 	love.graphics.rectangle("fill", -350-10, pad1_y - 50, 20, 100)
