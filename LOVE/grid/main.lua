@@ -1,29 +1,32 @@
 local isDown = love.keyboard.isDown
 local bool = { [true] = 1, [false] = 0 }
-local player = {x = 400, y = 400, width = 30, height = 40, ladder = false, floor = 500}
+local player = {x = 400, y = 400, width = 30, height = 40, ladder = false}
+local shadow = {player.x, player.y-1, width = 32, height = 2}
 local ladder = {movement = 2, width = 45, height = 100, x = 200, y = 400}
 local collision = false
+local falling = true
 
 function love.load()
 
 end
 
-function love.update()
-    collision = CheckCollision(player.x-1, player.y-1, player.width+2, player.height+2,
-            ladder.x-1, ladder.y-1, ladder.width+2, ladder.height+2)
+function love.update(dt)
+    collision = CheckCollision(player.x, player.y, player.width, player.height,
+            ladder.x, ladder.y, ladder.width, ladder.height)
+
     if true == collision then
-        player.ladder = true
+        falling = false
+    else
+        falling = true
     end
-    if player.ladder then
-        player.y = player.y + (bool[isDown"down"] - bool[isDown"up"]) * 3
-        player.ladder = false
-    end
+
     player.x = player.x + (bool[isDown"right"] - bool[isDown"left"]) * 4
 
-    if player.y < player.floor-player.height then
-        player.y = player.y + 1
+    if falling then
+        player.y = player.y + (dt*64)
+    else
+        player.y = player.y + (bool[isDown"down"] - bool[isDown"up"]) * 4
     end
-
 end
 
 function love.draw()
