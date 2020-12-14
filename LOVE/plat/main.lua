@@ -1,14 +1,30 @@
+window = {width = 1000, height = 600, flags = {fullscreen = false, vsync = 1, msaa = 2, centered = true, display = 2}}
+
 player = {jump_height = -300, img = love.graphics.newImage('player.png'), speed = 200,
-		  y = 200, ground = 200, width = 60, height = 60, x = 200, y_velocity = 0}
+		  width = 60, height = 60, x = 200, y_velocity = 0}
 
 gravity = -500
 
-ladder = {x = 600, y = 0+player.height, height = 200, width = 30, speed = 5}
+ladder = {x = 600, y = 0, height = 600, width = 30, speed = 5}
 
 falling = true
 
-function love.load()
+bullets = {speed = 250, height = player.height/6, width = player.width/3, range = 500, period = 100/200, time = 0}
+bullets_rev = {speed = -250, height = player.height/6, width = player.width/3, range = 500, period = 100/200, time = 0}
 
+time = love.timer.getTime( )
+
+function key(key)
+	if key == true then
+		bullets[#bullets+1] = { y = (player.y + player.height/2) - bullets.height/2,
+								x = (player.x + player.width/2) - bullets.width/2 }
+	end
+end
+
+function love.load()
+	success = love.window.setMode(window.width, window.height, window.flags)
+	player.y = love.graphics.getHeight()-player.height
+	player.ground = player.y
 end
 
 function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
@@ -19,8 +35,24 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
 end
 
 function love.update(dt)
+	time = love.timer.getTime( )
+	down = love.mouse.isDown(1)
+
+	if time - bullets.time > bullets.period and down then
+		key(down)
+		bullets.time = time
+		time = love.timer.getTime( )
+	end
+
+	for i,v in ipairs(bullets) do
+		v.x = v.x - bullets.speed * dt
+		if v.x < player.x-bullets.range then
+			table.remove(bullets, 1)
+		end
+	end
+
 	if love.keyboard.isDown('d') then
-		if player.x < (love.graphics.getWidth() - player.img:getWidth()) then
+		if player.x < (window.width - player.img:getWidth()) then
 			player.x = player.x + (player.speed * dt)
 		end
 	elseif love.keyboard.isDown('a') then
@@ -29,7 +61,7 @@ function love.update(dt)
 		end
 	end
 
-	if love.keyboard.isDown('space') then
+	if love.keyboard.isDown('space') and falling == true then
 		if player.y_velocity == 0 then
 			player.y_velocity = player.jump_height
 		end
@@ -52,7 +84,6 @@ function love.update(dt)
 		elseif love.keyboard.isDown('s') then
 			player.y = player.y + ladder.speed
 		end
-
 	end
 
 	if player.y > player.ground then
@@ -69,4 +100,7 @@ end
 function love.draw()
 	love.graphics.rectangle("fill", ladder.x, ladder.y, ladder.width, ladder.height)
 	love.graphics.draw(player.img, player.x, player.y, 0, 1, 1, 0, 0)
+	for i, v in ipairs(bullets) do
+		love.graphics.rectangle("fill", v.x, v.y, bullets.width, bullets.height)
+	end
 end
