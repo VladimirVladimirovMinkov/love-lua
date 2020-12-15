@@ -9,8 +9,8 @@ ladder = {x = 600, y = 0, height = 600, width = 30, speed = 5}
 
 falling = true
 
-bullets = {speed = 250, height = player.height/6, width = player.width/3, range = 500, period = 100/200, time = 0}
-bullets_rev = {speed = -250, height = player.height/6, width = player.width/3, range = 500, period = 100/200, time = 0}
+bullets = {speed = 250, height = player.height/6, width = player.width/3, range = 400, period = 100/200, time = 0}
+bullets_rev = {speed = -250, height = player.height/6, width = player.width/3, range = 400, period = 100/200, time = 0}
 
 time = love.timer.getTime( )
 
