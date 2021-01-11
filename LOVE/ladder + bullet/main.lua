@@ -1,23 +1,29 @@
 window = {width = 1000, height = 600, flags = {fullscreen = false, vsync = 1, msaa = 2, centered = true, display = 2}}
 
 player = {jump_height = -300, img = love.graphics.newImage('player.png'), speed = 200,
-		  width = 60, height = 60, x = 200, y_velocity = 0}
+		  width = 60, height = 60, x = 200, y_velocity = 0, direction = 1}
 
 gravity = -500
 
-ladder = {x = 600, y = 0, height = 600, width = 30, speed = 5}
+ladder = {x = 600, y = 0, height = 600, width = 30, speed = 1}
 
 falling = true
 
-bullets = {speed = 250, height = player.height/6, width = player.width/3, range = 400, period = 100/200, time = 0}
-bullets_rev = {speed = -250, height = player.height/6, width = player.width/3, range = 400, period = 100/200, time = 0}
+bullets = {speed = -250, height = player.height/6, width = player.width/3, range = 300, period = 100/300, time = 0}
 
 time = love.timer.getTime( )
 
 function key(key)
 	if key == true then
-		bullets[#bullets+1] = { y = (player.y + player.height/2) - bullets.height/2,
-								x = (player.x + player.width/2) - bullets.width/2 }
+		if player.direction == 1 then
+			bullets[#bullets+1] = { y = (player.y + player.height/2) - bullets.height/2,
+									x = (player.x + player.width/2) - bullets.width/2, speed = bullets.speed }
+		else
+			bullets.speed = -bullets.speed
+			bullets[#bullets+1] = { y = (player.y + player.height/2) - bullets.height/2,
+									x = (player.x + player.width/2) - bullets.width/2, speed = bullets.speed }
+			bullets.speed = -bullets.speed
+		end
 	end
 end
 
@@ -37,7 +43,7 @@ end
 function love.update(dt)
 	time = love.timer.getTime( )
 	down = love.mouse.isDown(1)
-
+	
 	if time - bullets.time > bullets.period and down then
 		key(down)
 		bullets.time = time
@@ -45,17 +51,19 @@ function love.update(dt)
 	end
 
 	for i,v in ipairs(bullets) do
-		v.x = v.x - bullets.speed * dt
-		if v.x < player.x-bullets.range then
+		v.x = v.x - v.speed * dt
+		if v.x > player.x+bullets.range then
 			table.remove(bullets, 1)
 		end
 	end
 
 	if love.keyboard.isDown('d') then
+		player.direction = 1
 		if player.x < (window.width - player.img:getWidth()) then
 			player.x = player.x + (player.speed * dt)
 		end
 	elseif love.keyboard.isDown('a') then
+		player.direction = -1
 		if player.x > 0 then
 			player.x = player.x - (player.speed * dt)
 		end
