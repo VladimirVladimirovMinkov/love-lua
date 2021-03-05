@@ -1,6 +1,6 @@
 local isDown = love.keyboard.isDown
 local bool = { [true] = 1, [false] = 0 }
-local speed = 3
+local speed = 2
 local ball = { x = 0, y = 0, vx = -speed, vy = speed }
 local pad1_y = 0
 local pad2_y = 0
