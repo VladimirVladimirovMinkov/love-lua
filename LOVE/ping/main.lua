@@ -1,6 +1,6 @@
 local isDown = love.keyboard.isDown
 local bool = { [true] = 1, [false] = 0 }
-local speed = 2
+local speed = 1
 local ball = { x = 0, y = 0, vx = -speed, vy = speed }
 local pad1_y = 0
 local pad2_y = 0
@@ -8,8 +8,8 @@ local score1 = 0
 local score2 = 0
 
 function love.update()
-	pad1_y = pad1_y + (bool[isDown"s"] - bool[isDown"w"]) * 7
-	pad2_y = pad2_y + (bool[isDown"down"] - bool[isDown"up"]) * 7
+	pad1_y = pad1_y + (bool[isDown"s"] - bool[isDown"w"]) * 2.5
+	pad2_y = pad2_y + (bool[isDown"down"] - bool[isDown"up"]) * 2.5
 	if pad1_y < -250 then pad1_y = -250 end
 	if pad1_y > 250 then pad1_y = 250 end
 	if pad2_y < -250 then pad2_y = -250 end
@@ -20,7 +20,7 @@ function love.update()
 		ball.vy = -ball.vy
 	end
 	if ball.x < -325 and ball.x > -350 and math.abs(pad1_y - ball.y) < 60 then
-		speed = speed + 0.2
+		speed = speed
 		ball.x = -325
 		ball.vx = speed
 		ball.vy = ball.vy * 0.5 + math.random(-10, 10) / 20 * speed
