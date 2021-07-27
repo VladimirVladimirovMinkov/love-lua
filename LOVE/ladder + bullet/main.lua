@@ -1,17 +1,17 @@
-window = {width = 1000, height = 600, flags = {fullscreen = false, vsync = 1, msaa = 2, centered = true, display = 2}}
+local window = {width = 1000, height = 600, flags = {fullscreen = false, vsync = 1, msaa = 2, centered = true, display = 2}}
 
-player = {jump_height = -300, img = love.graphics.newImage('player.png'), speed = 200,
+local player = {jump_height = -300, img = love.graphics.newImage('player.png'), speed = 200,
 		  width = 60, height = 60, x = 200, y_velocity = 0, direction = 1}
 
-gravity = -500
+local gravity = -500
 
-ladder = {x = 600, y = 0, height = 600, width = 30, speed = 1}
+local ladder = {x = 600, y = 0, height = 600, width = 30, speed = 1}
 
-falling = true
+local falling = true
 
-bullets = {speed = -250, height = player.height/6, width = player.width/3, range = 300, period = 100/300, time = 0}
+local bullets = {speed = -250, height = player.height/6, width = player.width/3, range = 300, period = 100/300, time = 0}
 
-time = love.timer.getTime( )
+local time = love.timer.getTime( )
 
 function key(key)
 	if key == true then
