@@ -1,28 +1,44 @@
-local mouse = {x = 0, y = 0}
-local pos = {x = 0, y = 0}
+local poi = {}
+local width = love.graphics.getWidth( )
+local height = love.graphics.getHeight( )
+local a = 0.5
 
-function drawlin(pos1, pos2)
-	pos[x] = pos1.x-pos2.x
-	pos[y] = pos1.y-pos2.y
-end
-
-function love.load()
-	screen_width, screen_height = love.graphics.getDimensions()
-	max_lins = 10
-	started = true
-end
-
-function love.update()
-	lins = {0, 0, 0, 0}
-	if love.mouse.isDown == true then
-		if started == true then
-			new_x, new_y = love.mouse.getX, love.mouse.getY
-			lins.insert(new_x)
-			lins.insert(new_y)
+function lin(x1, y1, x2, y2, r, g, b, a)
+	local x = x1 - x2
+	local y = y1 - y2
+	local m = y/x
+	if m < 0 then
+		m= m*-1
+	end
+	
+	if x > y then
+		for i=1, x do
+			poi[#poi + 1] = {math.min(x1, x2)+(i), math.min(y1, y2)+(i*m), r, g, b, a}
+		end
+	else
+		m = 1/m
+		for i=1, y do
+			poi[#poi + 1] = {math.min(x1, x2)+(i*m), math.min(y1, y2)+(i), r, g, b, a}
 		end
 	end
 end
 
+function love.load()
+	for x=0, width do
+	poi[x] = {}
+		for y=0, height do
+			poi[x][y] = {x, y}
+		end
+	end
+end
+
+function love.update()
+end
+
 function love.draw()
-	love.graphics.line(lins)
+	for x=0, width do
+		for y=0, height do
+			love.graphics.points(poi[x][y])
+		end
+	end
 end
