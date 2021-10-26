@@ -1,9 +1,11 @@
 local poi = {}
 local width = love.graphics.getWidth( )
 local height = love.graphics.getHeight( )
+local test = math.random
+local points = love.graphics.points
+local prin = love.graphics.print
 
 function love.load()
-	local test = math.random
 	for x=-2, width+2 do
 	poi[x] = {}
 		for y=-2, height+2 do
@@ -13,7 +15,6 @@ function love.load()
 end
 
 function love.update()
-	local test = math.random
 	for x=0, width do
 		for y=0, height do
 			poi[x][y] = {x, y, 
@@ -26,11 +27,10 @@ function love.update()
 end
 
 function love.draw()
-	local points = love.graphics.points
 	for x=0, width do
 		points(poi[x])
 	end
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
-	love.graphics.print("Width: "..tostring(width), 10, 25)
-	love.graphics.print("Height: "..tostring(height), 10, 40)
+	prin("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+	prin("Width: "..tostring(width), 10, 25)
+	prin("Height: "..tostring(height), 10, 40)
 end
