@@ -1,0 +1,1 @@
+love.filesystem.read("C:\\Users\\vladi\\Desktop\\github_repos\\love-lua\\LOVE\\color\\colors.csv")
